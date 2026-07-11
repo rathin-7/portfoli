@@ -76,7 +76,7 @@ app.use((req, res) => {
   res.status(404).json({ message: 'Route not found' });
 });
 
-app.use((err, req, res) => {
+app.use((err, req, res, next) => {
   if (process.env.NODE_ENV !== 'production') {
     // eslint-disable-next-line no-console
     console.error(err.stack);

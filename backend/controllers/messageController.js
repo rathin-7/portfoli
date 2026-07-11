@@ -14,17 +14,23 @@ export const sendMessage = async (req, res) => {
   try {
     const message = await Message.create(req.body);
 
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS },
-    });
+    if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+      try {
+        const transporter = nodemailer.createTransport({
+          service: 'gmail',
+          auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS },
+        });
 
-    await transporter.sendMail({
-      from: req.body.email,
-      to: process.env.ADMIN_EMAIL,
-      subject: `Portfolio Contact: ${req.body.subject || 'No Subject'}`,
-      html: `<h3>New message from ${req.body.name}</h3><p>Email: ${req.body.email}</p><p>${req.body.message}</p>`,
-    });
+        await transporter.sendMail({
+          from: req.body.email,
+          to: process.env.ADMIN_EMAIL,
+          subject: `Portfolio Contact: ${req.body.subject || 'No Subject'}`,
+          html: `<h3>New message from ${req.body.name}</h3><p>Email: ${req.body.email}</p><p>${req.body.message}</p>`,
+        });
+      } catch {
+        // Email failed but message was saved — continue
+      }
+    }
 
     res.status(201).json({ message: 'Message sent successfully' });
   } catch (error) {

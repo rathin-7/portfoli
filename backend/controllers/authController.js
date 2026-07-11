@@ -22,6 +22,9 @@ export const getMe = async (req, res) => {
 
 export const createAdmin = async (req, res) => {
   try {
+    if (!process.env.ADMIN_EMAIL || !process.env.ADMIN_PASSWORD) {
+      return res.status(500).json({ message: 'ADMIN_EMAIL and ADMIN_PASSWORD must be set in environment variables' });
+    }
     const exists = await User.findOne({ email: process.env.ADMIN_EMAIL });
     if (exists) return res.json({ message: 'Admin already exists' });
     const user = await User.create({
