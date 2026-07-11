@@ -72,13 +72,6 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
 
-app.get('/api/debug/env', (req, res) => {
-  const vars = ['MONGODB_URI', 'ADMIN_EMAIL', 'ADMIN_PASSWORD', 'JWT_SECRET', 'JWT_EXPIRE', 'CLIENT_URL', 'EMAIL_USER', 'EMAIL_PASS', 'NODE_ENV', 'PORT'];
-  const status = {};
-  vars.forEach(v => { status[v] = process.env[v] ? 'SET' : 'MISSING'; });
-  res.json(status);
-});
-
 app.use((req, res) => {
   res.status(404).json({ message: 'Route not found' });
 });
