@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { HiMenuAlt3, HiX } from 'react-icons/hi';
 import { FiGithub, FiLinkedin, FiInstagram, FiMail } from 'react-icons/fi';
@@ -22,6 +22,7 @@ export default function Navbar() {
   const { isMenuOpen, setIsMenuOpen, activeSection, setCursorVariant } = useApp();
   const { theme, toggleTheme } = useTheme();
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -34,6 +35,8 @@ export default function Navbar() {
     if (location.pathname === '/') {
       const el = document.querySelector(href);
       if (el) el.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      navigate('/', { state: { scrollTo: href } });
     }
   };
 

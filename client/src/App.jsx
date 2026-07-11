@@ -39,8 +39,8 @@ export default function App() {
       <ScrollProgress />
       {!isAdmin && <Navbar />}
       <Suspense fallback={<AdminFallback />}>
-        <AnimatePresence mode="wait">
-          <Routes location={location} key={location.pathname}>
+        <AnimatePresence>
+          <Routes location={location}>
             <Route path="/" element={<HomePage />} />
             <Route path="/project/:slug" element={<ProjectDetailPage />} />
             <Route path="/admin/login" element={<AdminLogin />} />

@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { useLocation } from 'react-router-dom';
 import HeroSection from '../components/sections/HeroSection';
 import AboutSection from '../components/sections/AboutSection';
 import SkillsSection from '../components/sections/SkillsSection';
@@ -13,6 +14,7 @@ import { useApp } from '../context/AppContext';
 
 export default function HomePage() {
   const { setActiveSection } = useApp();
+  const location = useLocation();
 
   useEffect(() => {
     const sections = ['hero', 'about', 'skills', 'services', 'experience', 'projects', 'contact'];
@@ -28,6 +30,15 @@ export default function HomePage() {
     });
     return () => observers.forEach(o => o?.disconnect());
   }, [setActiveSection]);
+
+  useEffect(() => {
+    if (location.state?.scrollTo) {
+      setTimeout(() => {
+        const el = document.querySelector(location.state.scrollTo);
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }, 300);
+    }
+  }, [location.state]);
 
   return (
     <>

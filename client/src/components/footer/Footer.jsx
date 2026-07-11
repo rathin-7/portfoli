@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { FiGithub, FiLinkedin, FiInstagram, FiMail, FiHeart } from 'react-icons/fi';
 
 const socials = [
@@ -17,6 +18,18 @@ const links = [
 ];
 
 export default function Footer() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleAnchorClick = (e, href) => {
+    e.preventDefault();
+    if (location.pathname === '/') {
+      document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      navigate('/', { state: { scrollTo: href } });
+    }
+  };
+
   return (
     <footer className="relative border-t border-white/5 bg-[#0a0a0f]">
       <div className="absolute inset-0 bg-gradient-to-t from-primary/5 to-transparent" />
@@ -36,7 +49,7 @@ export default function Footer() {
             <h4 className="font-semibold mb-4">Quick Links</h4>
             <div className="flex flex-col gap-2">
               {links.map((link) => (
-                <a key={link.name} href={link.href} className="text-white/50 hover:text-primary text-sm transition-colors">
+                <a key={link.name} href={link.href} onClick={(e) => handleAnchorClick(e, link.href)} className="text-white/50 hover:text-primary text-sm transition-colors">
                   {link.name}
                 </a>
               ))}

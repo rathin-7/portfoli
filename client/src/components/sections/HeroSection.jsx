@@ -93,7 +93,7 @@ export default function HeroSection() {
             transition={{ duration: 0.8, delay: 1 }}
             className="flex flex-wrap gap-4 mb-12"
           >
-            <a href="#projects" className="btn-primary flex items-center gap-2">
+            <a href="#projects" onClick={(e) => { e.preventDefault(); document.querySelector('#projects')?.scrollIntoView({ behavior: 'smooth' }); }} className="btn-primary flex items-center gap-2">
               View Projects
             </a>
             {hasResume === null ? (
@@ -109,7 +109,7 @@ export default function HeroSection() {
                 <FiDownload /> Resume Coming Soon
               </span>
             )}
-            <a href="#contact" className="btn-secondary flex items-center gap-2">
+            <a href="#contact" onClick={(e) => { e.preventDefault(); document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' }); }} className="btn-secondary flex items-center gap-2">
               <FiMail /> Contact Me
             </a>
           </motion.div>
@@ -171,7 +171,7 @@ export default function HeroSection() {
         animate={{ y: [0, 10, 0] }}
         transition={{ duration: 2, repeat: Infinity }}
       >
-        <a href="#about" className="flex flex-col items-center gap-2 text-white/30 hover:text-primary transition-colors">
+        <a href="#about" onClick={(e) => { e.preventDefault(); document.querySelector('#about')?.scrollIntoView({ behavior: 'smooth' }); }} className="flex flex-col items-center gap-2 text-white/30 hover:text-primary transition-colors">
           <span className="text-xs font-mono">Scroll Down</span>
           <FiArrowDown size={16} />
         </a>
