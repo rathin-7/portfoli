@@ -1,0 +1,25 @@
+{
+  "name": "Radhin",
+  "title": "MERN Stack Developer",
+  "tagline": "Building Modern Web Experiences",
+  "description": "Passionate full-stack developer specializing in the MERN stack. I create immersive, performant web applications with stunning UI/UX.",
+  "email": "rathinraj1122@gmail.com",
+  "phone": "+91 XXXXX XXXXX",
+  "location": {
+    "current": "Chennai",
+    "home": "Kerala"
+  },
+  "stats": {
+    "projects": 15,
+    "clients": 10,
+    "experience": 2,
+    "technologies": 20
+  },
+  "resumeUrl": "/resume/Radhinraj_Resume.pdf",
+  "socials": {
+    "github": "https://github.com/radhinraj",
+    "linkedin": "https://linkedin.com/in/radhinraj",
+    "instagram": "https://www.instagram.com/ra.th.in?igsh=MWNvZTB1ZzQ1a2p4ZQ%3D%3D&utm_source=qr",
+    "email": "mailto:rathinraj1122@gmail.com"
+  }
+}

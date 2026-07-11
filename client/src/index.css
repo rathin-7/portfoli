@@ -1,0 +1,129 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #8b5cf6;
+  --color-primary-light: #a78bfa;
+  --color-primary-dark: #7c3aed;
+  --color-accent: #06b6d4;
+  --color-accent-light: #22d3ee;
+  --color-neon: #22d3ee;
+  --color-surface: rgba(255, 255, 255, 0.05);
+  --color-surface-light: rgba(255, 255, 255, 0.1);
+  --color-glass: rgba(255, 255, 255, 0.08);
+  --color-glass-border: rgba(255, 255, 255, 0.12);
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+@layer base {
+  * { cursor: none !important; }
+  html { scroll-behavior: smooth; }
+  body {
+    @apply bg-[#0a0a0f] text-white antialiased overflow-x-hidden;
+    font-family: var(--font-sans);
+  }
+  ::selection { @apply bg-primary/30 text-white; }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { @apply bg-transparent; }
+  ::-webkit-scrollbar-thumb { @apply bg-primary/30 rounded-full; }
+  ::-webkit-scrollbar-thumb:hover { @apply bg-primary/50; }
+}
+
+@layer components {
+  .glass {
+    @apply bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl;
+  }
+  .glass-strong {
+    @apply bg-white/10 backdrop-blur-2xl border border-white/15 rounded-2xl;
+  }
+  .gradient-text {
+    @apply bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent;
+  }
+  .gradient-text-animated {
+    @apply bg-gradient-to-r from-primary via-accent to-pink-500 bg-clip-text text-transparent;
+    background-size: 200% auto;
+    animation: gradientShift 3s ease-in-out infinite;
+  }
+  .neon-glow {
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.3), 0 0 60px rgba(139, 92, 246, 0.1);
+  }
+  .neon-glow-accent {
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.3), 0 0 60px rgba(6, 182, 212, 0.1);
+  }
+  .section-padding {
+    @apply px-4 sm:px-6 lg:px-8 py-20 md:py-32;
+  }
+  .container-custom {
+    @apply max-w-7xl mx-auto;
+  }
+  .btn-primary {
+    @apply px-8 py-3 bg-gradient-to-r from-primary to-accent rounded-xl font-semibold text-white transition-all duration-300 hover:shadow-lg hover:shadow-primary/25 hover:scale-105 active:scale-95;
+  }
+  .btn-secondary {
+    @apply px-8 py-3 border border-white/20 rounded-xl font-semibold text-white transition-all duration-300 hover:bg-white/10 hover:border-white/30 active:scale-95;
+  }
+  .input-glass {
+    @apply w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-primary/50 focus:bg-white/10 transition-all duration-300;
+  }
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% center; }
+  50% { background-position: 200% center; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.3); }
+  50% { box-shadow: 0 0 40px rgba(139, 92, 246, 0.6); }
+}
+
+@keyframes aurora {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animate-float { animation: float 6s ease-in-out infinite; }
+.animate-float-delayed { animation: float 6s ease-in-out infinite 2s; }
+.animate-pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
+.animate-aurora {
+  background-size: 400% 400%;
+  animation: aurora 15s ease infinite;
+}
+
+.cursor-ripple {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  margin-left: -8px;
+  margin-top: -8px;
+  border-radius: 50%;
+  border: 1px solid rgba(139, 92, 246, 0.5);
+  pointer-events: none;
+  will-change: transform, opacity;
+  animation: rippleExpand 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+@keyframes rippleExpand {
+  0% { transform: scale(0); opacity: 0.8; }
+  100% { transform: scale(3.5); opacity: 0; }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  * { cursor: auto !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  * { cursor: auto !important; }
+  .cursor-ripple { display: none !important; }
+}
