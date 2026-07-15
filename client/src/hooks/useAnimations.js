@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 
 export const useScrollProgress = () => {
   const [progress, setProgress] = useState(0);
@@ -58,22 +58,26 @@ export const useLocalStorage = (key, initialValue) => {
 
 export const useCountUp = (end, duration = 2000, start = 0) => {
   const [count, setCount] = useState(start);
-  const [isRunning, setIsRunning] = useState(false);
+  const isRunningRef = useRef(false);
   const ref = useRef(null);
 
-  const trigger = () => {
-    if (isRunning) return;
-    setIsRunning(true);
+  const trigger = useCallback(() => {
+    if (isRunningRef.current) return;
+    isRunningRef.current = true;
     const startTime = Date.now();
     const animate = () => {
       const elapsed = Date.now() - startTime;
       const progress = Math.min(elapsed / duration, 1);
       const eased = 1 - Math.pow(1 - progress, 3);
       setCount(Math.floor(start + (end - start) * eased));
-      if (progress < 1) requestAnimationFrame(animate);
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        isRunningRef.current = false;
+      }
     };
     requestAnimationFrame(animate);
-  };
+  }, [end, duration, start]);
 
   return [count, ref, trigger];
 };

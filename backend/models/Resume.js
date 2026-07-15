@@ -5,6 +5,9 @@ const resumeSchema = new mongoose.Schema({
   fileUrl: { type: String },
   fileName: { type: String },
   fileId: { type: mongoose.Schema.Types.ObjectId, ref: 'File' },
+  fileData: { type: Buffer },
+  mimeType: { type: String, default: 'application/pdf' },
+  fileSize: { type: Number },
   active: { type: Boolean, default: true },
 }, { timestamps: true });
 

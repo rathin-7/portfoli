@@ -1,16 +1,9 @@
 import Resume from '../models/Resume.js';
 import File from '../models/File.js';
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const uploadDir = path.join(__dirname, '..', 'uploads');
 
 export const getResume = async (req, res) => {
   try {
-    const resume = await Resume.findOne({ active: true });
+    const resume = await Resume.findOne({ active: true }).select('-fileData');
     if (!resume) return res.json(null);
     res.json(resume);
   } catch (error) {
@@ -20,12 +13,12 @@ export const getResume = async (req, res) => {
 
 export const getLatestResume = async (req, res) => {
   try {
-    const resume = await Resume.findOne({ active: true, fileUrl: { $exists: true, $ne: null } }).sort('-updatedAt');
-    if (!resume || !resume.fileUrl) {
+    const resume = await Resume.findOne({ active: true, fileData: { $exists: true, $ne: null } }).sort('-updatedAt');
+    if (!resume || !resume.fileData) {
       return res.status(404).json({ message: 'No resume available' });
     }
     res.json({
-      fileUrl: resume.fileUrl,
+      fileUrl: `/api/resume/download`,
       fileName: resume.fileName,
       updatedAt: resume.updatedAt,
     });
@@ -36,26 +29,18 @@ export const getLatestResume = async (req, res) => {
 
 export const downloadResume = async (req, res) => {
   try {
-    const resume = await Resume.findOne({ active: true, fileUrl: { $exists: true, $ne: null } }).sort('-updatedAt');
-    if (!resume || !resume.fileUrl) {
+    const resume = await Resume.findOne({ active: true, fileData: { $exists: true, $ne: null } }).sort('-updatedAt');
+    if (!resume || !resume.fileData) {
       return res.status(404).json({ message: 'No resume available' });
     }
 
     const filename = resume.fileName || 'Radhinraj_Resume.pdf';
-    const filePath = path.join(uploadDir, path.basename(resume.fileUrl));
-
-    if (!fs.existsSync(filePath)) {
-      return res.status(404).json({ message: 'Resume file not found on server' });
-    }
-
-    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Type', resume.mimeType || 'application/pdf');
     res.setHeader('Content-Disposition', `attachment; filename="${filename}"; filename*=UTF-8''${encodeURIComponent(filename)}`);
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
     res.setHeader('Pragma', 'no-cache');
     res.setHeader('Expires', '0');
-
-    const stream = fs.createReadStream(filePath);
-    stream.pipe(res);
+    res.send(resume.fileData);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -63,22 +48,15 @@ export const downloadResume = async (req, res) => {
 
 export const previewResume = async (req, res) => {
   try {
-    const resume = await Resume.findOne({ active: true, fileUrl: { $exists: true, $ne: null } }).sort('-updatedAt');
-    if (!resume || !resume.fileUrl) {
+    const resume = await Resume.findOne({ active: true, fileData: { $exists: true, $ne: null } }).sort('-updatedAt');
+    if (!resume || !resume.fileData) {
       return res.status(404).json({ message: 'No resume available' });
     }
 
-    const filePath = path.join(uploadDir, path.basename(resume.fileUrl));
-    if (!fs.existsSync(filePath)) {
-      return res.status(404).json({ message: 'Resume file not found on server' });
-    }
-
-    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Type', resume.mimeType || 'application/pdf');
     res.setHeader('Content-Disposition', `inline; filename="${resume.fileName || 'resume.pdf'}"`);
     res.setHeader('Cache-Control', 'public, max-age=3600');
-
-    const stream = fs.createReadStream(filePath);
-    stream.pipe(res);
+    res.send(resume.fileData);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -90,18 +68,13 @@ export const uploadResume = async (req, res) => {
 
     const existingResume = await Resume.findOne({ active: true });
     if (existingResume?.fileId) {
-      const oldFile = await File.findById(existingResume.fileId);
-      if (oldFile) {
-        const oldPath = path.join(uploadDir, oldFile.fileName);
-        if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
-        await File.findByIdAndDelete(oldFile._id);
-      }
+      await File.findByIdAndDelete(existingResume.fileId).catch(() => {});
     }
 
     const file = await File.create({
       originalName: req.file.originalname,
-      fileName: req.file.filename,
-      fileUrl: `/uploads/${req.file.filename}`,
+      fileName: req.file.originalname,
+      fileUrl: 'mongodb-stored',
       mimeType: req.file.mimetype,
       size: req.file.size,
       category: 'resume',
@@ -112,11 +85,21 @@ export const uploadResume = async (req, res) => {
 
     const resume = await Resume.findOneAndUpdate(
       { active: true },
-      { fileUrl: file.fileUrl, fileName: file.originalName, fileId: file._id },
+      {
+        fileUrl: 'mongodb-stored',
+        fileName: file.originalName,
+        fileId: file._id,
+        fileData: req.file.buffer,
+        mimeType: req.file.mimetype,
+        fileSize: req.file.size,
+      },
       { upsert: true, new: true }
     );
 
-    res.json(resume);
+    const response = resume.toObject();
+    delete response.fileData;
+
+    res.json(response);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -128,12 +111,7 @@ export const deleteResume = async (req, res) => {
     if (!resume) return res.status(404).json({ message: 'No resume found' });
 
     if (resume.fileId) {
-      const file = await File.findById(resume.fileId);
-      if (file) {
-        const filePath = path.join(uploadDir, file.fileName);
-        if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
-        await File.findByIdAndDelete(file._id);
-      }
+      await File.findByIdAndDelete(resume.fileId).catch(() => {});
     }
 
     await Resume.findByIdAndDelete(resume._id);

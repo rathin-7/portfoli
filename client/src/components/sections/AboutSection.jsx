@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FiMapPin, FiBookOpen, FiBriefcase, FiHome } from 'react-icons/fi';
 import { useInView, useCountUp } from '../../hooks/useAnimations';
@@ -113,4 +114,3 @@ function StatCard({ label, value, delay }) {
   );
 }
 
-import { useEffect } from 'react';

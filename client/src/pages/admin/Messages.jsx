@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FiMail, FiCheck, FiTrash2, FiEye } from 'react-icons/fi';
+import { FiMail, FiTrash2 } from 'react-icons/fi';
 
 const API = '/api';
 const headers = () => ({ Authorization: `Bearer ${localStorage.getItem('token')}`, 'Content-Type': 'application/json' });

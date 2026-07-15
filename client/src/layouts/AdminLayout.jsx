@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { FiLayout, FiFolder, FiCode, FiBriefcase, FiMessageSquare, FiLogOut, FiMenu, FiX, FiFile, FiDownload } from 'react-icons/fi';
 
 const sidebarLinks = [

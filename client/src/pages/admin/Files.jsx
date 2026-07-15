@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiUpload, FiFile, FiFileText, FiFilePlus, FiImage, FiArchive, FiTrash2, FiEdit2, FiDownload, FiEye, FiSearch, FiFilter, FiX, FiCheck, FiRefreshCw } from 'react-icons/fi';
+import { FiUpload, FiFile, FiFileText, FiImage, FiArchive, FiTrash2, FiEdit2, FiDownload, FiEye, FiSearch, FiX, FiCheck, FiRefreshCw } from 'react-icons/fi';
 
 const API = '/api';
 const headers = () => ({ Authorization: `Bearer ${localStorage.getItem('token')}` });

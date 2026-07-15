@@ -1,6 +1,6 @@
-import { useRef } from 'react';
+import { useRef, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Float, MeshWobbleMaterial } from '@react-three/drei';
+import { Float } from '@react-three/drei';
 
 function FloatingLaptop() {
   const ref = useRef();
@@ -31,12 +31,15 @@ function FloatingLaptop() {
 function CodeParticles() {
   const ref = useRef();
   const count = 50;
-  const positions = new Float32Array(count * 3);
-  for (let i = 0; i < count; i++) {
-    positions[i * 3] = (Math.random() - 0.5) * 4;
-    positions[i * 3 + 1] = (Math.random() - 0.5) * 4;
-    positions[i * 3 + 2] = (Math.random() - 0.5) * 4;
-  }
+  const positions = useMemo(() => {
+    const pos = new Float32Array(count * 3);
+    for (let i = 0; i < count; i++) {
+      pos[i * 3] = (Math.random() - 0.5) * 4;
+      pos[i * 3 + 1] = (Math.random() - 0.5) * 4;
+      pos[i * 3 + 2] = (Math.random() - 0.5) * 4;
+    }
+    return pos;
+  }, []);
 
   useFrame((state) => {
     ref.current.rotation.y = state.clock.elapsedTime * 0.05;

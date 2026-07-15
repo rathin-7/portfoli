@@ -28,7 +28,6 @@ export default function CustomCursor() {
   const trailRefs = useRef([]);
   const mouseRef = useRef({ x: -100, y: -100 });
   const visibleRef = useRef(false);
-  const variantRef = useRef('default');
   const rafRef = useRef(null);
   const quickDotX = useRef(null);
   const quickDotY = useRef(null);
@@ -60,6 +59,17 @@ export default function CustomCursor() {
       opacity: s.glow > 0 ? 0.12 : 0,
       duration: 0.4, ease: 'power2.out', overwrite: 'auto',
     });
+  }, []);
+
+  const spawnRipple = useCallback((x, y) => {
+    const container = rippleContainerRef.current;
+    if (!container) return;
+    const el = document.createElement('div');
+    el.className = 'cursor-ripple';
+    el.style.left = `${x}px`;
+    el.style.top = `${y}px`;
+    container.appendChild(el);
+    setTimeout(() => el.remove(), 650);
   }, []);
 
   useEffect(() => {
@@ -179,18 +189,7 @@ export default function CustomCursor() {
       document.removeEventListener('mouseout', onHoverEnd);
       cancelAnimationFrame(rafRef.current);
     };
-  }, [applyVariant]);
-
-  const spawnRipple = useCallback((x, y) => {
-    const container = rippleContainerRef.current;
-    if (!container) return;
-    const el = document.createElement('div');
-    el.className = 'cursor-ripple';
-    el.style.left = `${x}px`;
-    el.style.top = `${y}px`;
-    container.appendChild(el);
-    setTimeout(() => el.remove(), 650);
-  }, []);
+  }, [applyVariant, spawnRipple]);
 
   if (IS_TOUCH_DEVICE) return null;
 

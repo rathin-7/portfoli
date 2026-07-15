@@ -30,5 +30,19 @@ export const upload = multer({
   fileFilter,
 });
 
+const resumeMemoryStorage = multer.memoryStorage();
+const resumeUpload = multer({
+  storage: resumeMemoryStorage,
+  limits: { fileSize: 10 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype === 'application/pdf') {
+      cb(null, true);
+    } else {
+      cb(new Error('Only PDF files are allowed'));
+    }
+  },
+});
+
 export const uploadSingle = upload.single('file');
 export const uploadMultiple = upload.array('files', 10);
+export const resumeUploadSingle = resumeUpload.single('file');

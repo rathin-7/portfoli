@@ -46,7 +46,7 @@ export default function AdminResume() {
         const data = await res.json();
         showMessage('error', data.message || 'Upload failed');
       }
-    } catch (e) {
+    } catch {
       showMessage('error', 'Upload failed — network error');
     }
     setUploading(false);
@@ -63,7 +63,7 @@ export default function AdminResume() {
       } else {
         showMessage('error', 'Delete failed');
       }
-    } catch (e) {
+    } catch {
       showMessage('error', 'Delete failed');
     }
   };
