@@ -1,6 +1,5 @@
 import { lazy, Suspense } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
-import { AnimatePresence } from 'framer-motion';
 import { useApp } from './context/AppContext';
 import Navbar from './components/navbar/Navbar';
 import Footer from './components/footer/Footer';
@@ -39,22 +38,20 @@ export default function App() {
       <ScrollProgress />
       {!isAdmin && <Navbar />}
       <Suspense fallback={<AdminFallback />}>
-        <AnimatePresence>
-          <Routes location={location}>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/project/:slug" element={<ProjectDetailPage />} />
-            <Route path="/admin/login" element={<AdminLogin />} />
-            <Route path="/admin" element={<AdminLayout />}>
-              <Route index element={<AdminDashboard />} />
-              <Route path="projects" element={<AdminProjects />} />
-              <Route path="skills" element={<AdminSkills />} />
-              <Route path="experience" element={<AdminExperience />} />
-              <Route path="files" element={<AdminFileManager />} />
-              <Route path="resume" element={<AdminResume />} />
-              <Route path="messages" element={<AdminMessages />} />
-            </Route>
-          </Routes>
-        </AnimatePresence>
+        <Routes location={location}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/project/:slug" element={<ProjectDetailPage />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<AdminDashboard />} />
+            <Route path="projects" element={<AdminProjects />} />
+            <Route path="skills" element={<AdminSkills />} />
+            <Route path="experience" element={<AdminExperience />} />
+            <Route path="files" element={<AdminFileManager />} />
+            <Route path="resume" element={<AdminResume />} />
+            <Route path="messages" element={<AdminMessages />} />
+          </Route>
+        </Routes>
       </Suspense>
       {!isAdmin && <Footer />}
     </>
