@@ -7,7 +7,6 @@ const headers = () => ({ Authorization: `Bearer ${localStorage.getItem('token')}
 
 const categories = [
   { id: 'all', label: 'All Files', icon: FiFile },
-  { id: 'resume', label: 'Resume', icon: FiFileText },
   { id: 'certificates', label: 'Certificates', icon: FiCheck },
   { id: 'documents', label: 'Documents', icon: FiFileText },
   { id: 'project-files', label: 'Project Files', icon: FiArchive },

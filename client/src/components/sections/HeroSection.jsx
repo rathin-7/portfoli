@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { FiArrowDown, FiGithub, FiLinkedin, FiMail, FiDownload } from 'react-icons/fi';
+import { FiArrowDown, FiGithub, FiLinkedin, FiMail } from 'react-icons/fi';
 import { TypeAnimation } from 'react-type-animation';
 import HeroScene from '../three/HeroScene';
 import { useApp } from '../../context/AppContext';
@@ -8,14 +7,6 @@ import profile from '../../config/profile.json';
 
 export default function HeroSection() {
   const { setCursorVariant } = useApp();
-  const [hasResume, setHasResume] = useState(null);
-
-  useEffect(() => {
-    fetch('/api/resume/latest')
-      .then(r => { if (r.ok) return r.json(); throw new Error('none'); })
-      .then(() => setHasResume(true))
-      .catch(() => setHasResume(false));
-  }, []);
 
   const titles = [
     'MERN Stack Developer',
@@ -96,19 +87,6 @@ export default function HeroSection() {
             <a href="#projects" onClick={(e) => { e.preventDefault(); document.querySelector('#projects')?.scrollIntoView({ behavior: 'smooth' }); }} className="btn-primary flex items-center gap-2">
               View Projects
             </a>
-            {hasResume === null ? (
-              <span className="btn-secondary flex items-center gap-2 opacity-50 pointer-events-none">
-                <FiDownload /> Loading...
-              </span>
-            ) : hasResume ? (
-              <a href="/api/resume/download" className="btn-secondary flex items-center gap-2" download>
-                <FiDownload /> Download Resume
-              </a>
-            ) : (
-              <span className="btn-secondary flex items-center gap-2 opacity-50 cursor-not-allowed" title="No resume uploaded yet">
-                <FiDownload /> Resume Coming Soon
-              </span>
-            )}
             <a href="#contact" onClick={(e) => { e.preventDefault(); document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' }); }} className="btn-secondary flex items-center gap-2">
               <FiMail /> Contact Me
             </a>

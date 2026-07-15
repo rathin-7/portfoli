@@ -16,7 +16,6 @@ const AdminSkills = lazy(() => import('./pages/admin/Skills'));
 const AdminExperience = lazy(() => import('./pages/admin/Experience'));
 const AdminMessages = lazy(() => import('./pages/admin/Messages'));
 const AdminFileManager = lazy(() => import('./pages/admin/Files'));
-const AdminResume = lazy(() => import('./pages/admin/Resume'));
 const AdminLogin = lazy(() => import('./pages/admin/Login'));
 
 const AdminFallback = () => (
@@ -48,7 +47,6 @@ export default function App() {
             <Route path="skills" element={<AdminSkills />} />
             <Route path="experience" element={<AdminExperience />} />
             <Route path="files" element={<AdminFileManager />} />
-            <Route path="resume" element={<AdminResume />} />
             <Route path="messages" element={<AdminMessages />} />
           </Route>
         </Routes>

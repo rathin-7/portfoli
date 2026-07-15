@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
-import { FiLayout, FiFolder, FiCode, FiBriefcase, FiMessageSquare, FiLogOut, FiMenu, FiX, FiFile, FiDownload } from 'react-icons/fi';
+import { FiLayout, FiFolder, FiCode, FiBriefcase, FiMessageSquare, FiLogOut, FiMenu, FiX, FiFile } from 'react-icons/fi';
 
 const sidebarLinks = [
   { to: '/admin', icon: FiLayout, label: 'Dashboard', exact: true },
@@ -8,7 +8,6 @@ const sidebarLinks = [
   { to: '/admin/skills', icon: FiCode, label: 'Skills' },
   { to: '/admin/experience', icon: FiBriefcase, label: 'Experience' },
   { to: '/admin/files', icon: FiFile, label: 'Documents' },
-  { to: '/admin/resume', icon: FiDownload, label: 'Resume' },
   { to: '/admin/messages', icon: FiMessageSquare, label: 'Messages' },
 ];
 
